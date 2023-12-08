@@ -17,5 +17,5 @@ Route::get('/', function () {
     return response()->json([
         'api_name' => env('APP_NAME'),
         'version' => '1.0'
-    ], 200);
+    ], 500);
 });
