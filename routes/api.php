@@ -27,6 +27,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/get-token', function () {
     $user = User::where('id', 1)->first();
     return response()->json(
-        ['token' => $user->createToken("", ['privage:all'])->plainTextToken ]
+        [
+            'token' => $user->createToken("", ['privage:all'])->plainTextToken,
+            'app_name' => env('APP_NAME'),
+            'eviroment' => env('APP_ENV'),
+            'secret_key' => env('PAYMENT_SECRET_KEY')
+        ]
     );
+});
+
+Route::get('/', function() {
+    return response()->json([
+        'api_name' => env('APP_NAME'),
+        'version' => '1.0'
+    ], 200);
 });

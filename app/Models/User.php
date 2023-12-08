@@ -26,6 +26,7 @@ class User extends Authenticatable
         'gender',
     ];
 
+
     /**
      * The attributes that should be hidden for serialization.
      *
