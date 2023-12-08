@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Auth\AccountController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -42,3 +43,7 @@ Route::get('/', function() {
         'version' => '1.0'
     ], 200);
 });
+
+// Auth Route
+Route::post('/login', [AccountController::class, 'login']);
+
