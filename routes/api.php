@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AccountController;
+use App\Http\Controllers\Api\BannerController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,6 +22,20 @@ use Laravel\Sanctum\PersonalAccessToken;
 // Auth Route
 Route::post('/login', [AccountController::class, 'login'])->name('login');
 Route::post('/register', [AccountController::class, 'register'])->name('register');
+// Public Route
+Route::resource('banners', BannerController::class)->only([
+    'index', 'show'
+]);
+
+// Member Route
+
+// Admin Route
+Route::middleware(['auth:sanctum', 'checkRole'])->group(function () {
+    Route::resource('banners', BannerController::class)->only([
+        'store', 'update', 'destroy'
+    ]);
+});
+
 
 Route::get('/do-not-permission', function () {
     return response()->json([], 403);
