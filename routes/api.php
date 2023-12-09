@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Auth\AccountController;
 use App\Http\Controllers\Api\BannerController;
+use App\Http\Controllers\Api\CategoryController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,6 +27,9 @@ Route::post('/register', [AccountController::class, 'register'])->name('register
 Route::resource('banners', BannerController::class)->only([
     'index', 'show'
 ]);
+Route::resource('categories', CategoryController::class)->only([
+    'index', 'show'
+]);
 
 // Member Route
 
@@ -34,9 +38,12 @@ Route::middleware(['auth:sanctum', 'checkRole'])->group(function () {
     Route::resource('banners', BannerController::class)->only([
         'store', 'update', 'destroy'
     ]);
+    Route::resource('categories', CategoryController::class)->only([
+        'store', 'update', 'destroy'
+    ]);
 });
 
 
 Route::get('/do-not-permission', function () {
-    return response()->json([], 403);
+    return response()->json(['message' => 'Unauthorized'], 403);
 })->name('not_auth');

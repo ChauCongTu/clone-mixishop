@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BannerRequest;
 use App\Models\Banner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -22,7 +23,7 @@ class BannerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(BannerRequest $request)
     {
         if (!$request->hasFile('image')) {
             return response()->json(['error' => 'Please Upload Image'], 400);
@@ -61,7 +62,7 @@ class BannerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(BannerRequest $request, int $id)
     {
         return response()->json(['message' => 'API Update Banner Is Not Supported'], 405);
     }
@@ -71,7 +72,12 @@ class BannerController extends Controller
      */
     public function destroy(int $id)
     {
-        Banner::destroy($id);
+        try {
+            Banner::where('id', $id)->delete();
+        }
+        catch(\Exception $e) {
+            return response()->json(['message' => 'Deletion Failed', 'error' => $e->getMessage()], 400);
+        }
         return response()->json(['message' => 'Deleted Successfully']);
     }
 }
