@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AccountController;
+use App\Http\Controllers\Api\Auth\ProfileController;
 use App\Http\Controllers\Api\BannerController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CouponController;
@@ -56,7 +57,11 @@ Route::resource('products-comments', ProductCommentController::class)->only([
     'index', 'show'
 ]);
 // Member Route
-
+Route::middleware(['auth:sanctum'])->group(function() {
+    Route::get('users/{user}', [ProfileController::class, 'get'])->name('users.get');
+    Route::put('users/{user}', [ProfileController::class, 'update'])->name('users.update');
+    Route::post('users/{user}/avatar', [ProfileController::class, 'avatar'])->name('users.avatar');
+});
 // Admin Route
 Route::middleware(['auth:sanctum', 'checkRole'])->group(function () {
     Route::resource('banners', BannerController::class)->only([
@@ -83,6 +88,9 @@ Route::middleware(['auth:sanctum', 'checkRole'])->group(function () {
     Route::resource('products-reviews', ProductReviewController::class)->only([
         'store', 'update', 'destroy'
     ]);
+    Route::get('users', [ProfileController::class, 'all'])->name('users.all');
+    Route::put('users/{user}/role', [ProfileController::class, 'role'])->name('users.role');
+    Route::delete('users/{user}', [ProfileController::class, 'destroy'])->name('users.destroy');
 });
 
 

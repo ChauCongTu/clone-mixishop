@@ -25,6 +25,7 @@ class BannerController extends Controller
      */
     public function store(BannerRequest $request)
     {
+        // return response()->json($request);
         if (!$request->hasFile('image')) {
             return response()->json(['error' => 'Please Upload Image'], 400);
         }
