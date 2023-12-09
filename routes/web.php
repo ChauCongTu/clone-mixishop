@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return response()->json([
         'api_name' => env('APP_NAME'),
-        'version' => '1.0'
+        'version' => '1.0',
+        'time' => time()
     ], 500);
 });
