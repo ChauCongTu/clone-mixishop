@@ -78,36 +78,32 @@ class CategoryController extends Controller
      */
     public function update(UpdateRequest $request, int $id)
     {
-        try {
-            $imageName = "/storage/none.png";
-            $category  = $request->only('name', 'is_parent', 'parent_id', 'desc');
-            $category['slug'] = Str::slug($category['name'], '-');
-            if ($request->hasFile('thumb')) {
-                $image = $request->thumb;
-                $allowedImageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'svg'];
-                $imageExtension = strtolower($image->getClientOriginalExtension());
+        $imageName = "/storage/none.png";
+        $category  = $request->only('name', 'is_parent', 'parent_id', 'desc');
+        $category['slug'] = Str::slug($category['name'], '-');
+        if ($request->hasFile('thumb')) {
+            $image = $request->thumb;
+            $allowedImageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'svg'];
+            $imageExtension = strtolower($image->getClientOriginalExtension());
 
-                if (!in_array($imageExtension, $allowedImageExtensions)) {
-                    return response()->json(['error' => 'Invalid image format'], 400);
-                }
-
-                $maxSize = 5 * 1024 * 1024;
-                if ($image->getSize() > $maxSize) {
-                    return response()->json(['error' => 'File size exceeds 5MB limit'], 400);
-                }
-
-                $imageName = $category['slug'] . '.' . $image->extension();
-                Storage::putFileAs('public/categories', $image, $imageName);
-                $category['thumb'] = env('APP_URL') . '/storage/categories/' . $imageName;
+            if (!in_array($imageExtension, $allowedImageExtensions)) {
+                return response()->json(['error' => 'Invalid image format'], 400);
             }
-            $updatedCategory = Category::where('id', $id)->update($category);
-            if ($updatedCategory) {
-                return response()->json(['message' => 'Updated!']);
+
+            $maxSize = 5 * 1024 * 1024;
+            if ($image->getSize() > $maxSize) {
+                return response()->json(['error' => 'File size exceeds 5MB limit'], 400);
             }
-            return response()->json(['message' => 'Something Went Wrong!'], 400);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+
+            $imageName = $category['slug'] . '.' . $image->extension();
+            Storage::putFileAs('public/categories', $image, $imageName);
+            $category['thumb'] = env('APP_URL') . '/storage/categories/' . $imageName;
         }
+        $updatedCategory = Category::where('id', $id)->update($category);
+        if ($updatedCategory) {
+            return response()->json(['message' => 'Updated!']);
+        }
+        return response()->json(['message' => 'Something Went Wrong!'], 400);
     }
 
     /**
