@@ -8,6 +8,7 @@ use App\Http\Requests\Auth\RoleRequest;
 use App\Http\Requests\Auth\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -29,6 +30,7 @@ class ProfileController extends Controller
     public function update(UserRequest $request, int $user_id)
     {
         $user = $request->only('name', 'email', 'password', 'address', 'gender', 'phone_number');
+        $user['password'] = Hash::make($user['password']);
         $createdUser = User::where('id', $user_id)->update($user);
         if ($createdUser) {
             return response()->json(['message' => 'Updated']);
