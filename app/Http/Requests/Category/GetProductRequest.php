@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Product;
+namespace App\Http\Requests\Category;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CommentRequest extends FormRequest
+class GetProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,7 @@ class CommentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product_id' => 'required|numeric',
-            'user_id' => '',
-            'avatar' => '',
-            'name' => 'required|min:5',
-            'content' => 'required|min:5',
-            'reply_id' => ''
+            'price_min' => '', 'price_max' => '', 'sort' => ''
         ];
     }
 }

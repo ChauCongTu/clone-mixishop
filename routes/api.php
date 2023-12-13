@@ -51,15 +51,18 @@ Route::get('coupons/apply/{code}', [CouponController::class, 'apply'])->name('co
 Route::resource('products', ProductController::class)->only([
     'index', 'show'
 ]);
+Route::get('products-search', [ProductController::class, 'findByName'])->name('products.find');
+Route::get('products/{product}/color-size', [ProductController::class, 'getOptions'])->name('products.color');
+Route::get('products/{product}/find-option', [ProductController::class, 'findByOptions'])->name('products.find-option');
 Route::get('products/{product}/images', [ProductImageController::class, 'getByProduct'])->name('products.images');
 Route::get('products/{product}/comments', [ProductCommentController::class, 'getByProduct'])->name('products.comments');
 Route::get('products/{product}/options', [ProductOptionController::class, 'getByProduct'])->name('products.options');
 Route::get('products/{product}/reviews', [ProductReviewController::class, 'getByProduct'])->name('products.reviews');
 Route::resource('products-comments', ProductCommentController::class)->only([
-    'index', 'show'
+    'index', 'show', 'store'
 ]);
 // Member Route
-Route::middleware(['auth:sanctum'])->group(function() {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('users/{user}', [ProfileController::class, 'get'])->name('users.get');
     Route::put('users/{user}', [ProfileController::class, 'update'])->name('users.update');
     Route::post('users/{user}/avatar', [ProfileController::class, 'avatar'])->name('users.avatar');
@@ -93,7 +96,7 @@ Route::middleware(['auth:sanctum', 'checkRole'])->group(function () {
         'store', 'update', 'destroy'
     ]);
     Route::resource('products-comments', ProductCommentController::class)->only([
-        'store', 'update', 'destroy'
+        'update', 'destroy'
     ]);
     Route::resource('products-reviews', ProductReviewController::class)->only([
         'store', 'update', 'destroy'

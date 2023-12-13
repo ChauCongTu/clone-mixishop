@@ -18,7 +18,7 @@ class ProductCommentController extends Controller
         return response()->json($comments);
     }
     public function getByProduct(int $product_id){
-        $comments = ProductComment::where('product_id', $product_id)->orderBy('created_at', 'DESC')->paginate(5);
+        $comments = ProductComment::with('user')->where('product_id', $product_id)->orderBy('created_at', 'DESC')->paginate(5);
         return response()->json($comments);
     }
 
